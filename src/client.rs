@@ -126,8 +126,13 @@ impl Default for Client {
 
 
 fn endpoint_name<M: prost::Message + Default>() -> String {
-    use heck::AsSnekCase;
-    AsSnekCase(type_name::<M>().split("::").last().unwrap_or_default()).to_string().replace("_result", "") + "s"
+    let message_name = type_name::<M>().split("::").last().unwrap_or_default();
+    if message_name == "Person" {
+        "people".to_string()
+    } else {
+        use heck::AsSnekCase;
+        AsSnekCase(message_name.to_string().replace("_result", "") + "s"
+    }
 }
 
 
