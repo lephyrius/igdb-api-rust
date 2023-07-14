@@ -131,7 +131,7 @@ fn endpoint_name<M: prost::Message + Default>() -> String {
         "people".to_string()
     } else {
         use heck::AsSnekCase;
-        AsSnekCase(message_name.to_string().replace("_result", "") + "s"
+        AsSnekCase(message_name).to_string().replace("_result", "") + "s"
     }
 }
 
