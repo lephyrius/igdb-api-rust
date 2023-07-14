@@ -1,5 +1,4 @@
-# igdb-api-rust
-IGDB API Rust
+# IGDB API Rust
 
 This is a wrapper for the IGDB REST API. It contains all the protocol buffers compiled using PROST which makes it typesafe. 
 
