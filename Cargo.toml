@@ -2,6 +2,13 @@
 name = "igdb-api-rust"
 version = "0.1.0"
 edition = "2021"
+license-file = "LICENSE"
+description = "API wrappper for IGDB REST API"
+repository = "https://github.com/lephyrius/igdb-api-rust"
+homepage = "https://github.com/lephyrius/igdb-api-rust"
+readme = "README.md"
+keywords = ["igdb"]
+categories = ["api-bindings"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
