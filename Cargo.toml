@@ -11,6 +11,7 @@ prost-types = "*"
 reqwest = "*"
 microjson = "*"
 thiserror = "*"
+heck = "0.4.1"
 
 [build-dependencies]
 prost-build = "*"

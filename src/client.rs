@@ -1,8 +1,10 @@
+use std::any::type_name;
 use crate::apicalypse_builder::ApicalypseBuilder;
 use crate::client::IGDBApiError::AuthError;
 use microjson::JSONParsingError;
 use prost::DecodeError;
 use thiserror::Error;
+use crate::igdb::Count;
 
 #[derive(Error, Debug)]
 pub enum IGDBApiError {
@@ -74,14 +76,34 @@ impl Client {
         &mut self,
         query: &str,
     ) -> Result<M, IGDBApiError> {
-        // https://api.igdb.com/v4/
+        self.request_api(query, format!("https://api.igdb.com/v4/{}", endpoint_name::<M>())).await
+    }
+
+
+    pub async fn request_count<M: prost::Message + Default>(
+        &mut self,
+        query: &'static ApicalypseBuilder,
+    ) -> Result<Count, IGDBApiError> {
+        let query_string = query.to_query();
+        self.request_count_raw::<M>(query_string.as_str()).await
+    }
+
+    pub async fn request_count_raw<M: prost::Message + Default>(
+        &mut self,
+        query: &str,
+    ) -> Result<Count, IGDBApiError> {
+        self.request_api(query, format!("https://api.igdb.com/v4/{}/count", endpoint_name::<M>())).await
+    }
+
+
+
+    async fn request_api<M: prost::Message + Default>(&mut self, query: &str, url: String) -> Result<M, IGDBApiError> {
         if let Err(error) = self.check_access_token().await {
             return Err(error);
         }
-
         let bytes = self
             .client
-            .post("https://api.igdb.com/v4/games")
+            .post(url)
             .body(query.to_string())
             .bearer_auth(&self.client_access_token)
             .send()
@@ -100,4 +122,53 @@ impl Default for Client {
             &var("IGDB_API_SECRET").expect("for IGDB_API_SECRET env var to be defined"),
         )
     }
+}
+
+
+fn endpoint_name<M: prost::Message + Default>() -> String {
+    use heck::AsSnekCase;
+    AsSnekCase(type_name::<M>().split("::").last().unwrap_or_default()).to_string().replace("_result", "") + "s"
+}
+
+
+#[cfg(test)]
+mod tests {
+    use crate::igdb::{AlternativeName, Game, GameEngineLogoResult, ThemeResult};
+    use super::*;
+
+    #[test]
+    fn endpoint_name_games() {
+        assert_eq!(
+            "games",
+            endpoint_name::<Game>()
+        );
+    }
+
+
+    #[test]
+    fn endpoint_name_alternative_names() {
+        assert_eq!(
+            "alternative_names",
+            endpoint_name::<AlternativeName>()
+        );
+    }
+
+    #[test]
+    fn endpoint_name_game_engine_logos() {
+        assert_eq!(
+            "game_engine_logos",
+            endpoint_name::<GameEngineLogoResult>()
+        );
+    }
+
+
+    #[test]
+    fn endpoint_name_themes() {
+        assert_eq!(
+            "themes",
+            endpoint_name::<ThemeResult>()
+        );
+    }
+
+
 }
