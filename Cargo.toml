@@ -23,3 +23,5 @@ heck = "0.4.1"
 [build-dependencies]
 prost-build = "*"
 
+[profile.release]
+lto = true
