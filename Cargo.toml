@@ -1,0 +1,17 @@
+[package]
+name = "igdb-api-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+prost = {version = "*", default-features = false, features = ["std"]}
+prost-types = "*"
+reqwest = "*"
+microjson = "*"
+thiserror = "*"
+
+[build-dependencies]
+prost-build = "*"
+
