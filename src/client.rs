@@ -138,8 +138,39 @@ fn endpoint_name<M: prost::Message + Default>() -> String {
 
 #[cfg(test)]
 mod tests {
+    use std::env;
     use crate::igdb::{AlternativeName, Game, GameEngineLogoResult, ThemeResult};
     use super::*;
+
+
+
+    #[test]
+    fn test_default() {
+        // Set the environment variables that the default method expects to read
+        env::set_var("IGDB_API_ID", "test_id");
+        env::set_var("IGDB_API_SECRET", "test_secret");
+
+        // Call the default method
+        let client = Client::default();
+
+        assert_eq!(client.client_id, "test_id");
+        assert_eq!(client.client_secret, "test_secret");
+
+        // Clean up by removing the environment variables if needed
+        env::remove_var("IGDB_API_ID");
+        env::remove_var("IGDB_API_SECRET");
+    }
+
+    #[test]
+    fn test_new() {
+        let client = Client::new("test_id", "test_secret");
+
+        // Basic checks to make sure the client was constructed correctly
+        assert_eq!(client.client_id, "test_id");
+        assert_eq!(client.client_secret, "test_secret");
+        assert_eq!(client.client_access_token, "");
+    }
+
 
     #[test]
     fn endpoint_name_games() {

@@ -18,7 +18,10 @@ prost-types = "*"
 reqwest = "*"
 microjson = "*"
 thiserror = "*"
-heck = "0.4.1"
+heck = "*"
+
+[dev-dependencies]
+mockito = "*"
 
 [build-dependencies]
 prost-build = "*"

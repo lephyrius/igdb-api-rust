@@ -52,7 +52,7 @@ impl ApicalypseBuilder {
     }
 }
 
-fn wrap_statement(prefix: &str, statemet: &dyn ToString) -> String {
+fn wrap_statement<T: ToString>(prefix: &str, statemet: &T) -> String {
     let statement_string = statemet.to_string();
     if statement_string.is_empty() || statement_string == "0" {
         String::default()
