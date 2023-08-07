@@ -9,6 +9,7 @@ homepage = "https://github.com/lephyrius/igdb-api-rust"
 readme = "README.md"
 keywords = ["igdb"]
 categories = ["api-bindings"]
+include = ["src/**/*", "LICENSE", "README.md", "build.rs"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
