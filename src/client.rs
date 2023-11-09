@@ -161,14 +161,14 @@ mod tests {
     #[test]
     fn test_default() {
         // Set the environment variables that the default method expects to read
-        env::set_var("IGDB_API_ID", "test_id");
-        env::set_var("IGDB_API_SECRET", "test_secret");
+        env::set_var("IGDB_API_ID", "test_id_env");
+        env::set_var("IGDB_API_SECRET", "test_secret_env");
 
         // Call the default method
         let client = Client::default();
 
-        assert_eq!(client.client_id, "test_id");
-        assert_eq!(client.client_secret, "test_secret");
+        assert_eq!(client.client_id, "test_id_env");
+        assert_eq!(client.client_secret, "test_secret_env");
 
         // Clean up by removing the environment variables if needed
         env::remove_var("IGDB_API_ID");
