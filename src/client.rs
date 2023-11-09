@@ -6,6 +6,8 @@ use prost::DecodeError;
 use thiserror::Error;
 use crate::igdb::Count;
 
+const LIB_VERSION_HEADER: &str = concat!("igdb-api-rust v " ,env!("CARGO_PKG_VERSION"));
+
 #[derive(Error, Debug)]
 pub enum IGDBApiError {
     #[error("Something is wrong with the auth please check the credentials: {0:?}")]
@@ -29,6 +31,7 @@ pub struct Client {
     client_secret: String,
     client: reqwest::Client,
     client_access_token: String,
+    endpoint: String,
 }
 
 impl Client {
@@ -38,7 +41,13 @@ impl Client {
             client_secret: client_secret.to_string(),
             client: reqwest::Client::new(),
             client_access_token: String::default(),
+            endpoint: "https://api.igdb.com/v4".to_string()
         }
+    }
+
+    pub fn with_endpoint(mut self, endpoint: &str) -> Self {
+        self.endpoint = endpoint.to_string();
+        self
     }
 
     pub async fn request<M: prost::Message + Default>(
@@ -76,7 +85,7 @@ impl Client {
         &mut self,
         query: &str,
     ) -> Result<M, IGDBApiError> {
-        self.request_api(query, format!("https://api.igdb.com/v4/{}", endpoint_name::<M>())).await
+        self.request_api(query,  endpoint_name::<M>()).await
     }
 
 
@@ -92,7 +101,12 @@ impl Client {
         &mut self,
         query: &str,
     ) -> Result<Count, IGDBApiError> {
-        self.request_api(query, format!("https://api.igdb.com/v4/{}/count", endpoint_name::<M>())).await
+        self.request_api(query, format!("{}/count", self.endpoint_url::<M>())).await
+    }
+
+
+    fn endpoint_url<M: prost::Message + Default>(&self) -> String {
+        format!("{}/{}", self.endpoint, endpoint_name::<M>())
     }
 
 
@@ -106,6 +120,7 @@ impl Client {
             .post(url)
             .body(query.to_string())
             .bearer_auth(&self.client_access_token)
+            .header("x-user-agent", LIB_VERSION_HEADER )
             .send()
             .await?
             .bytes()
@@ -134,7 +149,6 @@ fn endpoint_name<M: prost::Message + Default>() -> String {
         AsSnekCase(message_name).to_string().replace("_result", "") + "s"
     }
 }
-
 
 #[cfg(test)]
 mod tests {
