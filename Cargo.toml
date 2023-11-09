@@ -14,18 +14,18 @@ include = ["src/**/*", "LICENSE", "README.md", "build.rs"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-prost = {version = "*", default-features = false, features = ["std"]}
-prost-types = "*"
-reqwest = "*"
-microjson = "*"
-thiserror = "*"
-heck = "*"
+prost = {version = "0.12.1", default-features = false, features = ["std"]}
+prost-types = "0.12.1"
+reqwest = "0.11.22"
+microjson = "0.1.2"
+thiserror = "1"
+heck = "0.5.0-rc.1"
 
 [dev-dependencies]
-mockito = "*"
+mockito = "1"
 
 [build-dependencies]
-prost-build = "*"
+prost-build = "0.12.1"
 
 [profile.release]
 lto = true
