@@ -120,6 +120,7 @@ impl Client {
             .post(url)
             .body(query.to_string())
             .bearer_auth(&self.client_access_token)
+            .header("client-id", &self.client_id)
             .header("x-user-agent", LIB_VERSION_HEADER )
             .send()
             .await?
