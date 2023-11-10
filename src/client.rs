@@ -96,7 +96,7 @@ impl Client {
     /// use igdb_api_rust::client::Client;
     /// let mut client = Client::new("test","test");
     /// let query = "fields name; limit 5;";
-    /// let response = client.request_raw::<igdb_api_rust::igdb::Game>(query).await;
+    /// let response = client.request_raw::<igdb_api_rust::igdb::Game>(query);
     /// ```
     pub async fn request_raw<M: prost::Message + Default>(
         &mut self,
@@ -111,7 +111,7 @@ impl Client {
     /// use igdb_api_rust::client::Client;
     /// let mut client = Client::new("test","test");
     /// let query = ApicalypseBuilder::default().filter("id > 1337");
-    /// let response = client.request_count::<igdb_api_rust::igdb::Game>(query).await;
+    /// let response = client.request_count::<igdb_api_rust::igdb::Game>(query);
     /// ```
     pub async fn request_count<M: prost::Message + Default>(
         &mut self,
@@ -128,7 +128,7 @@ impl Client {
     /// use igdb_api_rust::client::Client;
     /// let mut client = Client::new("test","test");
     /// let query = "w id > 1337";
-    /// let response = client.request_count_raw::<igdb_api_rust::igdb::Game>(query).await;
+    /// let response = client.request_count_raw::<igdb_api_rust::igdb::Game>(query);
     /// ```
     pub async fn request_count_raw<M: prost::Message + Default>(
         &mut self,
