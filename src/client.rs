@@ -46,7 +46,7 @@ impl Client {
             endpoint: "https://api.igdb.com/v4".to_string()
         }
     }
-    /// Set a custom endpoint for use with the CORS proxy.
+    /// Set a custom endpoint for use with the CORS proxy or your own proxy.
     /// ```
     /// use igdb_api_rust::client::Client;
     /// let mut client = Client::new("test","test").with_endpoint("https://example.com/v4");
@@ -59,7 +59,7 @@ impl Client {
     /// Request the IGDB API for a protobuf response.
     pub async fn request<M: prost::Message + Default>(
         &mut self,
-        query: &'static ApicalypseBuilder,
+        query: &ApicalypseBuilder,
     ) -> Result<M, IGDBApiError> {
         let query_string = query.to_query();
         self.request_raw(query_string.as_str()).await

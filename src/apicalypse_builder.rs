@@ -12,37 +12,37 @@ pub struct ApicalypseBuilder {
 impl ApicalypseBuilder {
 
     /// Add a filter to the query.
-    pub fn filter(&mut self, filter: &str) -> &mut Self {
+    pub fn filter(mut self, filter: &str) -> Self {
         self.filter = filter.to_string();
         self
     }
 
     /// Add a limit of entries to the query.
-    pub fn limit(&mut self, limit: usize) -> &mut Self {
+    pub fn limit(mut self, limit: usize) -> Self {
         self.limit = limit;
         self
     }
 
     /// Add an offset from where the entries should start in the results to the query.
-    pub fn offset(&mut self, offset: usize) -> &mut Self {
+    pub fn offset(mut self, offset: usize) -> Self {
         self.offset = offset;
         self
     }
 
     /// Specify fields to be returned by the query.
-    pub fn fields(&mut self, fields: &str) -> &mut Self {
+    pub fn fields(mut self, fields: &str) -> Self {
         self.fields = fields.to_string();
         self
     }
 
     /// Exclude fields from the query.
-    pub fn exclude(&mut self, exclude: &str) -> &mut Self {
+    pub fn exclude(mut self, exclude: &str) -> Self {
         self.exclude = exclude.to_string();
         self
     }
 
     /// Order on some specific fields.
-    pub fn sort(&mut self, sort: &str) -> &mut Self {
+    pub fn sort(mut self, sort: &str) -> Self {
         self.sort = sort.to_string();
         self
     }

@@ -1,15 +1,15 @@
 [package]
 name = "igdb-api-rust"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
-license-file = "LICENSE"
+license = "MIT OR Apache-2.0"
 description = "API wrappper for IGDB REST API"
 repository = "https://github.com/lephyrius/igdb-api-rust"
 homepage = "https://github.com/lephyrius/igdb-api-rust"
 readme = "README.md"
 keywords = ["igdb"]
 categories = ["api-bindings"]
-include = ["src/**/*", "LICENSE", "README.md", "build.rs"]
+include = ["src/**/*", "LICENSE-MIT", "LICENSE-APACHE", "README.md", "build.rs"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -23,7 +23,7 @@ heck = "0.5.0-rc.1"
 
 [dev-dependencies]
 mockito = "1"
-tokio = {version = "1", features = ["full"]}
+tokio = {version = "1"}
 
 [build-dependencies]
 prost-build = "0.12.1"
