@@ -93,10 +93,13 @@ impl Client {
     /// This is the raw version of the request method.
     /// It allows you to pass a query string directly.
     /// ```
-    /// use igdb_api_rust::client::Client;
-    /// let mut client = Client::new("test","test");
-    /// let query = "fields name; limit 5;";
-    /// let response = client.request_raw::<igdb_api_rust::igdb::Game>(query);
+    /// #[tokio::main]
+    /// async fn main() {
+    ///   use igdb_api_rust::client::Client;
+    ///   let mut client = Client::new("test","test");
+    ///   let query = "fields name; limit 5;";
+    ///   let response = client.request_raw::<igdb_api_rust::igdb::Game>(query).await;
+    /// }
     /// ```
     pub async fn request_raw<M: prost::Message + Default>(
         &mut self,
@@ -107,15 +110,20 @@ impl Client {
 
     /// Request the IGDB API for a protobuf response for the count endpoint.
     /// ```
-    /// use igdb_api_rust::apicalypse_builder::ApicalypseBuilder;
-    /// use igdb_api_rust::client::Client;
-    /// let mut client = Client::new("test","test");
-    /// let query = ApicalypseBuilder::default().filter("id > 1337");
-    /// let response = client.request_count::<igdb_api_rust::igdb::Game>(query);
+    ///#[tokio::main]
+    /// async fn main() {
+    ///   use igdb_api_rust::apicalypse_builder::ApicalypseBuilder;
+    ///   use igdb_api_rust::client::Client;
+    ///   let mut client = Client::new("test","test");
+    ///   let query = ApicalypseBuilder::default().filter("id > 1337").clone();
+    ///   let response = client.request_count::<igdb_api_rust::igdb::Game>(&query).await;
+    ///   println!("{:?}", response);
+    ///
+    /// }
     /// ```
     pub async fn request_count<M: prost::Message + Default>(
         &mut self,
-        query: &'static ApicalypseBuilder,
+        query: & ApicalypseBuilder,
     ) -> Result<Count, IGDBApiError> {
         let query_string = query.to_query();
         self.request_count_raw::<M>(query_string.as_str()).await
@@ -125,10 +133,13 @@ impl Client {
     /// This is the raw version of the request_count method.
     /// It allows you to pass a query string directly.
     /// ```
-    /// use igdb_api_rust::client::Client;
-    /// let mut client = Client::new("test","test");
-    /// let query = "w id > 1337";
-    /// let response = client.request_count_raw::<igdb_api_rust::igdb::Game>(query);
+    /// #[tokio::main]
+    /// async fn main() {
+    ///   use igdb_api_rust::client::Client;
+    ///   let mut client = Client::new("test","test");
+    ///   let query = "w id > 1337";
+    ///   let response = client.request_count_raw::<igdb_api_rust::igdb::Game>(query).await;
+    /// }
     /// ```
     pub async fn request_count_raw<M: prost::Message + Default>(
         &mut self,
