@@ -157,8 +157,6 @@ mod tests {
     use crate::igdb::{AlternativeName, Game, GameEngineLogoResult, ThemeResult};
     use super::*;
 
-
-
     #[test]
     fn test_default() {
         // Set the environment variables that the default method expects to read
