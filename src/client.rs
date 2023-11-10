@@ -26,6 +26,7 @@ impl From<JSONParsingError> for IGDBApiError {
     }
 }
 
+/// The IGDB API client.
 pub struct Client {
     client_id: String,
     client_secret: String,
@@ -35,6 +36,7 @@ pub struct Client {
 }
 
 impl Client {
+    /// Create a new client.
     pub fn new(client_id: &str, client_secret: &str) -> Self {
         Client {
             client_id: client_id.to_string(),
@@ -44,12 +46,17 @@ impl Client {
             endpoint: "https://api.igdb.com/v4".to_string()
         }
     }
-
+    /// Set a custom endpoint for use with the CORS proxy.
+    /// ```
+    /// use igdb_api_rust::client::Client;
+    /// let mut client = Client::new("test","test").with_endpoint("https://example.com/v4");
+    /// ```
     pub fn with_endpoint(mut self, endpoint: &str) -> Self {
         self.endpoint = endpoint.to_string();
         self
     }
 
+    /// Request the IGDB API for a protobuf response.
     pub async fn request<M: prost::Message + Default>(
         &mut self,
         query: &'static ApicalypseBuilder,
@@ -57,6 +64,7 @@ impl Client {
         let query_string = query.to_query();
         self.request_raw(query_string.as_str()).await
     }
+
 
     async fn check_access_token(&mut self) -> Result<(), IGDBApiError> {
         if self.client_access_token.is_empty() {
@@ -81,6 +89,15 @@ impl Client {
         Ok(())
     }
 
+    /// Request the IGDB API for a protobuf response.
+    /// This is the raw version of the request method.
+    /// It allows you to pass a query string directly.
+    /// ```
+    /// use igdb_api_rust::client::Client;
+    /// let mut client = Client::new("test","test");
+    /// let query = "fields name; limit 5;";
+    /// let response = client.request_raw::<igdb_api_rust::igdb::Game>(query).await;
+    /// ```
     pub async fn request_raw<M: prost::Message + Default>(
         &mut self,
         query: &str,
@@ -88,7 +105,14 @@ impl Client {
         self.request_api(query,  endpoint_name::<M>()).await
     }
 
-
+    /// Request the IGDB API for a protobuf response for the count endpoint.
+    /// ```
+    /// use igdb_api_rust::apicalypse_builder::ApicalypseBuilder;
+    /// use igdb_api_rust::client::Client;
+    /// let mut client = Client::new("test","test");
+    /// let query = ApicalypseBuilder::default().filter("id > 1337");
+    /// let response = client.request_count::<igdb_api_rust::igdb::Game>(query).await;
+    /// ```
     pub async fn request_count<M: prost::Message + Default>(
         &mut self,
         query: &'static ApicalypseBuilder,
@@ -97,6 +121,15 @@ impl Client {
         self.request_count_raw::<M>(query_string.as_str()).await
     }
 
+    /// Request the IGDB API for a protobuf response for the count endpoint.
+    /// This is the raw version of the request_count method.
+    /// It allows you to pass a query string directly.
+    /// ```
+    /// use igdb_api_rust::client::Client;
+    /// let mut client = Client::new("test","test");
+    /// let query = "w id > 1337";
+    /// let response = client.request_count_raw::<igdb_api_rust::igdb::Game>(query).await;
+    /// ```
     pub async fn request_count_raw<M: prost::Message + Default>(
         &mut self,
         query: &str,
@@ -108,8 +141,6 @@ impl Client {
     fn endpoint_url<M: prost::Message + Default>(&self) -> String {
         format!("{}/{}", self.endpoint, endpoint_name::<M>())
     }
-
-
 
     async fn request_api<M: prost::Message + Default>(&mut self, query: &str, url: String) -> Result<M, IGDBApiError> {
         if let Err(error) = self.check_access_token().await {
@@ -131,6 +162,7 @@ impl Client {
 }
 
 impl Default for Client {
+    /// Get a client with the credentials from the environment variables.
     fn default() -> Self {
         use std::env::var;
         Self::new(
