@@ -16,7 +16,7 @@ include = ["src/**/*", "LICENSE-MIT", "LICENSE-APACHE", "README.md", "build.rs"]
 [dependencies]
 prost = {version = "0.12.1", default-features = false, features = ["std"]}
 prost-types = {version = "0.12.1", default-features = false, features = ["std"]}
-reqwest = { version = "0.11.22", default-features = false, features = ["__rustls"] }
+reqwest = { version = "0.11.22", default-features = false, features = ["rustls-tls"] }
 microjson = "0.1.2"
 thiserror = "1"
 heck = "0.5.0-rc.1"
